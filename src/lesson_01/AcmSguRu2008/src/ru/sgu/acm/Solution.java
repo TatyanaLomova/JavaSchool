@@ -1,7 +1,8 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+import java.io.*;
+import java.util.RandomAccess;
 import java.util.Scanner;
+
+import static java.lang.System.*;
 
 /**
  * Created by tanya on 11.09.16.
@@ -25,12 +26,19 @@ public class Solution {
 
         try{
             Scanner sc = new Scanner(new File(inputFile));
-            while(sc.hasNext()){
+            if (sc.hasNextInt())
                 number = sc.nextInt();
+
+            if (sc.hasNextInt())
                 truckCapacity = sc.nextInt();
-                for (int i = 0; i < number; i++)
+
+            goodsWeight = new int [number];
+
+            for (int i = 0; i < number; i++){
+                if (sc.hasNextInt())
                     goodsWeight[i] = sc.nextInt();
             }
+
         }catch(FileNotFoundException e){
             e.printStackTrace();
         }
@@ -40,9 +48,8 @@ public class Solution {
 
         calculateWeight();
 
-        try{
-            PrintWriter pw = new PrintWriter(new File(outputFile));
-            pw.println(number+" "+curCapacity);
+        try(FileWriter fw = new FileWriter(outputFile);){
+            fw.write(Integer.toString(number) + " " + Integer.toString(curCapacity));
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -50,17 +57,23 @@ public class Solution {
 
     private void calculateWeight(){
 
+        number = 0;
+
         for (int a: goodsWeight){
-            if ((curCapacity += a) > truckCapacity) continue;
-                else {
+            if ((curCapacity += a) <= truckCapacity) {
                 number++;
-                curCapacity += a;
-            };
+            }
+            else {
+                curCapacity -= a;
+                continue;
+            }
         }
     }
 
     public static void main(String[] args) {
-        Solution sol = new Solution("input.txt","output.txt");
+
+        String userDir = getProperty("user.dir");
+        Solution sol = new Solution(userDir + "/input.txt", userDir + "/output.txt");
         sol.readParams();
         sol.writeParams();
     }
