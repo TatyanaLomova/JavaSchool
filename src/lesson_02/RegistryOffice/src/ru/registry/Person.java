@@ -21,9 +21,11 @@ public class Person{
      */
     public boolean marry(Person person) {
 
+        //TODO: null pointer
         if (this.man != person.man)
             if (this.spouse != person){
 
+            //---->>>>
                 if (this.spouse != null){
                     spouse.divorce();
                     divorce();
@@ -33,6 +35,7 @@ public class Person{
                     person.spouse.divorce();
                     person.divorce();
                 }
+                //<<<<---- //TODO: divorce(); person.divorce();
 
                 this.spouse = person;
                 person.spouse = this;
@@ -50,6 +53,7 @@ public class Person{
     public boolean divorce() {
 
         if (spouse != null){
+            //TODO: spouse.spouse = null;
             spouse = null;
             return true;
         }
