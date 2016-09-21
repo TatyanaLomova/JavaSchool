@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by tanya on 21.09.16.
@@ -26,54 +24,98 @@ interface CountMap<T> {
     Map toMap();
 
     //Тот же самый контракт как и toMap(), только всю информацию записать в destination
-    void toMap(Map destination);
+    void toMap(Map<? super T, Integer>  destination);
 }
 
 
 
 public class CountMapIml<T> implements CountMap<T>{
 
+    private List< Pair <T> > array;
+
+    private class Pair<T> {
+
+        public T key;
+        private int value;
+
+        public Pair(T k, int v) {
+            this.key = k;
+            this.value = v;
+        }
+    }
 
     public CountMapIml() {
-        Map
+        array = new ArrayList<>();
     }
 
     @Override
     public void add(T o) {
 
+        for (Pair node : array)
+            if (node.key.equals(o)){
+                node.value++;
+                return;
+            }
 
+        array.add(new Pair<T>(o,1));
     }
 
     @Override
     public int getCount(T o) {
 
-      return count;
+        for (Pair node : array)
+            if (node.key.equals(o)){
+               return node.value;
+            }
+
+        return 0;
     }
 
     @Override
     public int remove(T o) {
 
-        return count;
+        for (Pair node : array)
+            if (node.key.equals(o))
+                if (node.value != 1)
+                    return node.value--;
+                else
+                    array.remove(node);
+        return 1;
     }
 
     @Override
     public int size() {
 
-       return 0;
+       return array.size();
     }
+
 
     @Override
     public void addAll(CountMap<T> source) {
+
+        for (Pair node: array)
+            source.add((T)node.key);
+
+        //НЕ СМОГЛА РЕАЛИЗОВАТЬ МЕТОД
 
     }
 
     @Override
     public Map toMap() {
-        return null;
+
+        Map<? super T,Integer> map = new HashMap<T, Integer>();
+
+        for (Pair node: array)
+            map.put((T)node.key, node.value);
+
+        return map;
     }
 
     @Override
-    public void toMap(Map destination) {
+    public void toMap(Map<? super T, Integer> destination) {
+
+        for (Pair node: array)
+            destination.put((T)node.key, node.value);
 
     }
 
@@ -81,15 +123,21 @@ public class CountMapIml<T> implements CountMap<T>{
 
         CountMap<Integer> map = new CountMapIml<>();
 
+        Map<Integer, Integer> newMap;
+
         map.add(10);
         map.add(10);
         map.add(5);
         map.add(6);
         map.add(5);
+        map.add(7);
         map.add(10);
 
-        // int count = map.getCout(5); // 2
-        // int count = map.getCout(6); // 1
-        // int count = map.getCout(10); // 3*/
+        System.out.println(map.size());         // 4
+        System.out.println(map.remove(10));     // 3
+        System.out.println(map.getCount(10));   // 2
+
+        System.out.println(map.toMap());    // {5=2, 6=1, 7=1, 10=2}
+
     }
 }
