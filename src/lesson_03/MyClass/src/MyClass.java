@@ -32,7 +32,7 @@ public class MyClass {
      */
     public void countStrings() {
 
-        HashSet<String> myHashSet = new HashSet<>();
+        Set<String> myHashSet = new HashSet<>();
 
         readStrings(myHashSet);
 
@@ -54,6 +54,7 @@ public class MyClass {
 
     /**
      * This method counts number of String repeats
+     * Need to add a comparator
      */
     public void numberOfRepeat(){
 
@@ -89,7 +90,7 @@ public class MyClass {
      */
     public void reverseString(){
 
-        // Also ArrayList can be used
+        // Also List + ListIterator и ArrayDeque + descendingIterator
         LinkedList <String> myLinkedList = new LinkedList<> ();
 
         readStrings(myLinkedList);
