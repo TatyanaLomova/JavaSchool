@@ -16,9 +16,9 @@ public class Main {
     }
 
     // Вызов методов класса TerminalImpl
-    private static void checkMenuChoice() throws TerminalException, InterruptedException, PinException {
+    private static void checkMenuChoice() throws TerminalException, InterruptedException, InvalidPinException {
 
-        boolean flag = true;
+
 
         TerminalImpl terminal = new TerminalImpl();
 
@@ -31,44 +31,68 @@ public class Main {
         // В остальных случаях выход
         switch (sc.next()) {
             case "1":
-                do {
-                    try {
-                        terminal.checkAccountStatus();
-                        break;
-                    } catch (TerminalException msg) {
-                        System.out.println(msg.getMessage());
-                    }
-                } while (true);
+                terminalCheckAccountStatus(terminal);
                 break;
             case "2":
-                do {
-                    try {
-                        terminal.putMoney();
-                        break;
-                    } catch (TerminalException msg) {
-                        System.out.println(msg.getMessage());
-                        if (sc.next().equals("n")) flag = false;
-                    }
-                } while (flag);
+                terminalPutMoney(terminal, sc);
                 break;
             case "3":
-                do {
-                    try {
-                        terminal.withdrawMoney();
-                        break;
-                    } catch (TerminalException msg) {
-                        System.out.println(msg.getMessage());
-                        if (sc.next().equals("n")) flag = false;
-                    }
-                } while (flag);
+                terminalWithdrawMoney(terminal, sc);
                 break;
             case "4":
             default:
-                System.exit(0);
+                break;
         }
     }
 
-    public static void main(String[] args) throws IOException, PinException, InterruptedException, TerminalException {
+    private static void terminalCheckAccountStatus(TerminalImpl terminal){
+        do {
+            try {
+                terminal.checkAccountStatus();
+                break;
+            } catch (TerminalException msg) {
+                System.out.println(msg.getMessage());
+            } catch (InvalidPinException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        } while (true);
+    }
+    private static void terminalPutMoney(TerminalImpl terminal, Scanner sc){
+        boolean flag = true;
+        do {
+            try {
+                terminal.putMoney();
+                break;
+            } catch (TerminalException msg) {
+                System.out.println(msg.getMessage());
+                if (sc.next().equals("n")) flag = false;
+            } catch (InvalidPinException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        } while (flag);
+    }
+    private static void terminalWithdrawMoney(TerminalImpl terminal, Scanner sc){
+        boolean flag = true;
+        do {
+            try {
+                terminal.withdrawMoney();
+                break;
+            } catch (TerminalException msg) {
+                System.out.println(msg.getMessage());
+                if (sc.next().equals("n")) flag = false;
+            } catch (InvalidPinException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        } while (flag);
+    }
+
+    public static void main(String[] args) throws IOException, InvalidPinException, InterruptedException, TerminalException {
 
         while (true){
 
